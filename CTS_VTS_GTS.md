@@ -19,3 +19,52 @@ In the context of Android security and device management , CTS , GTS and VTS are
 * Passing VTS is necessary for device manufacturers to obtain Android Certification.
 
 ![Summery](https://github.com/rammohanreddy434/Android/blob/master/images/cts_vts/CTS_VTS.png)
+
+# 📱 Android CTS vs VTS: Impact of Modifying System Components from Vendor
+
+## ✅ Summary
+
+If you modify **system components** from the **vendor side**, you risk **failing CTS**, while **VTS may still pass** — depending on the nature of the change.
+
+---
+
+## 🔍 What Are CTS and VTS?
+
+- **CTS (Compatibility Test Suite)**  
+  Tests the **system partition** and ensures the Android OS behaves as expected (AOSP standards, APIs, permissions, security).
+
+- **VTS (Vendor Test Suite)**  
+  Tests the **vendor partition** and ensures HALs, interfaces, and vendor extensions are compatible with the Android framework.
+
+---
+
+## ⚠️ Effect of Modifying System Components from Vendor
+
+| Modification Type                              | CTS Risk | VTS Risk |
+|------------------------------------------------|----------|----------|
+| Replacing a system binary (`system/bin`)       | ✅ Yes   | ❌ Low    |
+| Editing `system/sepolicy`                      | ✅ Yes   | ✅ Yes    |
+| Modifying framework JARs (`system/framework/`) | ✅ Yes   | ❌ N/A    |
+| Adding system services from vendor             | ✅ Yes   | ✅ Yes    |
+| Adding privileged permissions to `system/`     | ✅ Yes   | ❌ Low    |
+| Adding HALs to `vendor/`                       | ❌ No    | ✅ Must comply with VTS rules |
+
+---
+
+## 🧩 Treble Architecture Rule (Post Android 9+)
+
+> **System** and **Vendor** partitions must be **independent**.  
+> Vendors must **not modify system components**, but may extend functionality through `vendor/`, `product/`, or `system_ext/`.
+
+---
+
+## 🚫 Forbidden or Risky Vendor-Side Changes (For CTS)
+
+1. **Modifying `system/lib`, `system/bin`, or `system/framework`**
+2. **Overriding system services or permissions**
+3. **Adding SELinux policies in `system/sepolicy` that grant excessive access**
+4. **Changing AOSP behavior from the vendor side**
+
+---
+
+
